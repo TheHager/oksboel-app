@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'services/api_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -53,7 +54,7 @@ class _ErhvervHubPageState extends State<ErhvervHubPage> {
         "https://script.google.com/macros/s/AKfycbyHtOHT7rN8FPBN9GvpAeF6WgK9snTmZhQIF-e0mhFy36e30cioVCp20QYfwc84llrQMg/exec?type=erhverv";
 
     try {
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) {
         setState(() {
           _allData = json.decode(response.body);
@@ -295,17 +296,8 @@ class SkydetiderPage extends StatefulWidget {
 }
 
 class _SkydetiderPageState extends State<SkydetiderPage> {
-  // HUSK at sætte dit eget Apps Script link ind her:
-  final String apiUrl =
-      "https://script.google.com/macros/s/AKfycbyHtOHT7rN8FPBN9GvpAeF6WgK9snTmZhQIF-e0mhFy36e30cioVCp20QYfwc84llrQMg/exec?type=skydetider";
-
   Future<List<dynamic>> fetchAktiviteter() async {
-    final response = await http.get(Uri.parse(apiUrl));
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
-      throw Exception('Kunne ikke hente aktiviteter');
-    }
+    return await ApiService.fetchFromScript('skydetider') as List<dynamic>;
   }
 
   @override
@@ -691,9 +683,6 @@ class _UdforskPageState extends State<UdforskPage> {
   Position? _brugerPosition;
   late Future<List<dynamic>> _ruterFuture;
 
-  final String apiUrl =
-      "https://script.google.com/macros/s/AKfycbyHtOHT7rN8FPBN9GvpAeF6WgK9snTmZhQIF-e0mhFy36e30cioVCp20QYfwc84llrQMg/exec?type=ruter";
-
   @override
   void initState() {
     super.initState();
@@ -753,12 +742,7 @@ class _UdforskPageState extends State<UdforskPage> {
   }
 
   Future<List<dynamic>> fetchRuter() async {
-    final response = await http.get(Uri.parse(apiUrl));
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
-      throw Exception('Kunne ikke hente ruter');
-    }
+    return await ApiService.fetchFromScript('ruter') as List<dynamic>;
   }
 
   Future<void> _aabnLink(String urlString) async {
@@ -1027,14 +1011,17 @@ class _UdforskPageState extends State<UdforskPage> {
 
 // --- VEJR SERVICE ---
 class WeatherService {
-  final String apiKey = "ce8baecf5e5393db39b9296ce4274757"; // HUSK DIN NØGLE
+  static const String apiKey = String.fromEnvironment('WEATHER_API_KEY', defaultValue: '');
 
   Future<Map<String, dynamic>> fetchWeather() async {
-    final url =
-        'https://api.openweathermap.org/data/2.5/weather?lat=55.62&lon=8.28&appid=$apiKey&units=metric&lang=da';
-    final response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) return json.decode(response.body);
-    throw Exception('Fejl ved hentning af vejr');
+    try {
+      final url = 'https://api.openweathermap.org/data/2.5/weather?lat=55.62&lon=8.28&appid=$apiKey&units=metric&lang=da';
+      final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 10));
+      if (response.statusCode == 200) return json.decode(response.body);
+      throw Exception('Fejl ved hentning af vejr, status code: ${response.statusCode}');
+    } catch (e) {
+      throw Exception('Fejl ved vejr API kald: $e');
+    }
   }
 }
 
@@ -1074,7 +1061,7 @@ class _OverblikPageState extends State<OverblikPage> {
     const url =
         "https://script.google.com/macros/s/AKfycbyHtOHT7rN8FPBN9GvpAeF6WgK9snTmZhQIF-e0mhFy36e30cioVCp20QYfwc84llrQMg/exec?type=Begivenheder";
     try {
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         if (data.isNotEmpty && mounted) {
@@ -1090,11 +1077,10 @@ class _OverblikPageState extends State<OverblikPage> {
   }
 
   Future<void> _hentVejrData() async {
-    const url =
-        'https://api.openweathermap.org/data/2.5/weather?q=oksbol&units=metric&lang=da&appid=ce8baecf5e5393db39b9296ce4274757';
+    final url = 'https://api.openweathermap.org/data/2.5/weather?q=oksbol&units=metric&lang=da&appid=${WeatherService.apiKey}';
 
     try {
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (mounted) {
@@ -1139,7 +1125,7 @@ class _OverblikPageState extends State<OverblikPage> {
     const url =
         "https://script.google.com/macros/s/AKfycbyHtOHT7rN8FPBN9GvpAeF6WgK9snTmZhQIF-e0mhFy36e30cioVCp20QYfwc84llrQMg/exec?type=Nyheder";
     try {
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
@@ -1477,28 +1463,13 @@ class _DetSkerPageState extends State<DetSkerPage> {
   }
 
   Future<void> _hentBegivenheder() async {
-    // Sørg for at dette er dit NYESTE script link (det samme som på forsiden)
-    const url =
-        "https://script.google.com/macros/s/AKfycbyHtOHT7rN8FPBN9GvpAeF6WgK9snTmZhQIF-e0mhFy36e30cioVCp20QYfwc84llrQMg/exec?type=Begivenheder";
-
     try {
-      final response = await http.get(Uri.parse(url));
-
+      final data = await ApiService.fetchFromScript('Begivenheder');
       if (!mounted) return;
-
-      if (response.statusCode == 200) {
-        // Vi gemmer rå-dataen direkte
-        final dynamic decodedData = json.decode(response.body);
-
-        setState(() {
-          if (decodedData is List) {
-            _begivenheder = decodedData;
-          } else {
-            _begivenheder = [];
-          }
-          _isLoading = false;
-        });
-      }
+      setState(() {
+        _begivenheder = data as List<dynamic>;
+        _isLoading = false;
+      });
     } catch (e) {
       debugPrint("Fejl ved hentning af begivenheder: $e");
       if (mounted) {
