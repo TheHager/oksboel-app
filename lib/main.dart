@@ -180,7 +180,7 @@ class _ErhvervHubPageState extends State<ErhvervHubPage> {
                                     borderRadius: BorderRadius.circular(12),
                                     child: billedeUrl.isNotEmpty
                                         ? Image.network(
-                                            billedeUrl,
+                                            'https://corsproxy.io/?$billedeUrl',
                                             width: 60,
                                             height: 60,
                                             fit: BoxFit.contain,
@@ -1172,7 +1172,7 @@ class _OverblikPageState extends State<OverblikPage> {
                           )
                         : _ikonUrl.isNotEmpty
                         ? Image.network(
-                            _ikonUrl,
+                            'https://corsproxy.io/?$_ikonUrl',
                             width: 60,
                             height: 60,
                             // Gør ikonet hvidt så det matcher designet. Slet denne linje, hvis du vil have skyernes rigtige farver:
@@ -1632,7 +1632,7 @@ class _BegivenhedKortState extends State<BegivenhedKort> {
             // BILLEDE: Tilpasser sig automatisk
             if (billedeUrl.isNotEmpty)
               Image.network(
-                billedeUrl,
+                'https://corsproxy.io/?$billedeUrl',
                 width: double.infinity, // Fyld hele bredden
                 fit: BoxFit
                     .fitWidth, // Skalerer højden automatisk, så intet skæres af
