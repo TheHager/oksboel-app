@@ -8,7 +8,8 @@ import 'dart:convert';
 import 'package:geolocator/geolocator.dart'; // Vigtig for GPS
 import 'nyheder_page.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: '.env');
   runApp(const OksbolApp());
 }
 
