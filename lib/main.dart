@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'services/api_service.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -1013,7 +1012,7 @@ class _UdforskPageState extends State<UdforskPage> {
 
 // --- VEJR SERVICE ---
 class WeatherService {
-  final String apiKey = dotenv.env["WEATHER_API_KEY"] ?? "";
+  static const String apiKey = String.fromEnvironment('WEATHER_API_KEY', defaultValue: '');
 
   Future<Map<String, dynamic>> fetchWeather() async {
     try {
@@ -1079,7 +1078,7 @@ class _OverblikPageState extends State<OverblikPage> {
   }
 
   Future<void> _hentVejrData() async {
-    final url = 'https://api.openweathermap.org/data/2.5/weather?q=oksbol&units=metric&lang=da&appid=${dotenv.env["WEATHER_API_KEY"]}';
+    final url = 'https://api.openweathermap.org/data/2.5/weather?q=oksbol&units=metric&lang=da&appid=${WeatherService.apiKey}';
 
     try {
       final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 10));

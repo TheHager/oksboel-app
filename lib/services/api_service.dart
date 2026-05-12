@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiService {
-  static final String _baseUrl = dotenv.env['GOOGLE_APPS_SCRIPT_BASE_URL'] ?? '';
+  static const String _baseUrl = String.fromEnvironment('GOOGLE_APPS_SCRIPT_BASE_URL', defaultValue: '');
 
   static Future<dynamic> fetchFromScript(String type) async {
     if (_baseUrl.isEmpty) {
-      throw Exception('GOOGLE_APPS_SCRIPT_BASE_URL mangler i .env filen');
+      throw Exception('GOOGLE_APPS_SCRIPT_BASE_URL mangler (skal angives via --dart-define)');
     }
 
     final url = '$_baseUrl?type=$type';
