@@ -9,7 +9,6 @@ import 'package:geolocator/geolocator.dart'; // Vigtig for GPS
 import 'nyheder_page.dart';
 
 Future<void> main() async {
-  await dotenv.load(fileName: '.env');
   runApp(const OksbolApp());
 }
 
