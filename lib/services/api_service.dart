@@ -2,13 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String _baseUrl = String.fromEnvironment('GOOGLE_APPS_SCRIPT_BASE_URL', defaultValue: '');
+  static const String _baseUrl = 'https://script.google.com/macros/s/AKfycbyHtOHT7rN8FPBN9GvpAeF6WgK9snTmZhQIF-e0mhFy36e30cioVCp20QYfwc84llrQMg/exec';
 
   static Future<dynamic> fetchFromScript(String type) async {
-    if (_baseUrl.isEmpty) {
-      throw Exception('GOOGLE_APPS_SCRIPT_BASE_URL mangler (skal angives via --dart-define)');
-    }
-
     final url = '$_baseUrl?type=$type';
 
     try {
