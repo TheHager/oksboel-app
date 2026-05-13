@@ -1,0 +1,11 @@
+The user wants to move static logos into `assets/images/` and load them via `Image.asset`.
+These logos are currently provided via external URLs from the Google Sheet (e.g. `superbrugsen.coop.dk/media/.../logo.png`).
+
+To transition to local assets, the following steps are required:
+1. Identify all static partner/sponsor logos used in the app that are fetched from the Google Sheet API (Erhverv tab).
+2. Download these logos (e.g. SuperBrugsen, 365 Discount, Cafe Smedetorvet) and save them to `assets/images/logos/`.
+3. Add `assets/images/logos/` to `flutter: assets:` in `pubspec.yaml`.
+4. Create a mapping function in the app (e.g., in `lib/utils/asset_mapper.dart`) that checks if an incoming `billedeUrl` matches a known partner name or URL, and if so, returns the local asset path (e.g. `assets/images/logos/superbrugsen.png`).
+5. Update `PlatformAwareImage` or the places where `billedeUrl` is consumed to check the mapping function. If a local asset exists, it uses `Image.asset(localPath)`. Otherwise, it falls back to `PlatformAwareImage(imageUrl: billedeUrl)`.
+
+This plan will be included in the PR description as a proposed roadmap for part 2.
