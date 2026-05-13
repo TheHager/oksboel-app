@@ -7,5 +7,5 @@ String getProxyUrl(String originalUrl) {
     return originalUrl;
   }
 
-  return 'https://wsrv.nl/?url=\${Uri.encodeComponent(originalUrl)}';
+  return 'https://wsrv.nl/?url=${Uri.encodeComponent(originalUrl)}';
 }
