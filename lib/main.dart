@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -179,13 +180,12 @@ class _ErhvervHubPageState extends State<ErhvervHubPage> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
                                     child: billedeUrl.isNotEmpty
-                                        ? Image.network(
-                                            'https://corsproxy.io/?$billedeUrl',
+                                        ? CachedNetworkImage(imageUrl: billedeUrl,
                                             width: 60,
                                             height: 60,
                                             fit: BoxFit.contain,
-                                            errorBuilder:
-                                                (context, error, stackTrace) =>
+                                            errorWidget:
+                                                (context, url, error) =>
                                                     Container(
                                                       width: 60,
                                                       height: 60,
@@ -1171,8 +1171,7 @@ class _OverblikPageState extends State<OverblikPage> {
                             ),
                           )
                         : _ikonUrl.isNotEmpty
-                        ? Image.network(
-                            'https://corsproxy.io/?$_ikonUrl',
+                        ? CachedNetworkImage(imageUrl: _ikonUrl,
                             width: 60,
                             height: 60,
                             // Gør ikonet hvidt så det matcher designet. Slet denne linje, hvis du vil have skyernes rigtige farver:
@@ -1631,12 +1630,11 @@ class _BegivenhedKortState extends State<BegivenhedKort> {
           children: [
             // BILLEDE: Tilpasser sig automatisk
             if (billedeUrl.isNotEmpty)
-              Image.network(
-                'https://corsproxy.io/?$billedeUrl',
+              CachedNetworkImage(imageUrl: billedeUrl,
                 width: double.infinity, // Fyld hele bredden
                 fit: BoxFit
                     .fitWidth, // Skalerer højden automatisk, så intet skæres af
-                errorBuilder: (context, error, stackTrace) =>
+                errorWidget: (context, url, error) =>
                     const SizedBox.shrink(),
               ),
 
