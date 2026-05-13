@@ -1,3 +1,4 @@
+import 'utils/proxy_helper.dart';
 
 import 'dart:ui';
 
@@ -180,7 +181,7 @@ class _ErhvervHubPageState extends State<ErhvervHubPage> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
                                     child: billedeUrl.isNotEmpty
-                                        ? Image.network(billedeUrl, width: 60, height: 60, fit: BoxFit.contain)
+                                        ? Image.network(getProxyUrl(billedeUrl), width: 60, height: 60, fit: BoxFit.contain)
                                         : const SizedBox(width: 60, height: 60),
                                   ),
                                   const SizedBox(width: 16),
@@ -1147,7 +1148,7 @@ class _OverblikPageState extends State<OverblikPage> {
                             ),
                           )
                         : _ikonUrl.isNotEmpty
-                        ? Image.network(_ikonUrl, width: 60, height: 60, color: Colors.white)
+                        ? Image.network(getProxyUrl(_ikonUrl), width: 60, height: 60, color: Colors.white)
                         : const Icon(
                             Icons.wb_sunny,
                             color: Colors.white,
@@ -1601,7 +1602,7 @@ class _BegivenhedKortState extends State<BegivenhedKort> {
           children: [
             // BILLEDE: Tilpasser sig automatisk
             if (billedeUrl.isNotEmpty)
-              Image.network(billedeUrl, width: double.infinity, fit: BoxFit.fitWidth),
+              Image.network(getProxyUrl(billedeUrl), width: double.infinity, fit: BoxFit.fitWidth),
 
             Padding(
               padding: const EdgeInsets.all(16),
