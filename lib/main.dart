@@ -1,3 +1,5 @@
+import 'utils/platform_aware_image.dart';
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -179,24 +181,7 @@ class _ErhvervHubPageState extends State<ErhvervHubPage> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
                                     child: billedeUrl.isNotEmpty
-                                        ? Image.network(
-                                            billedeUrl,
-                                            width: 60,
-                                            height: 60,
-                                            fit: BoxFit.contain,
-                                            errorBuilder:
-                                                (context, error, stackTrace) =>
-                                                    Container(
-                                                      width: 60,
-                                                      height: 60,
-                                                      color:
-                                                          Colors.grey.shade100,
-                                                      child: const Icon(
-                                                        Icons.broken_image,
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
-                                          )
+                                        ? PlatformAwareImage(imageUrl: billedeUrl, width: 60, height: 60, fit: BoxFit.contain)
                                         : Container(
                                             width: 60,
                                             height: 60,
@@ -1171,13 +1156,7 @@ class _OverblikPageState extends State<OverblikPage> {
                             ),
                           )
                         : _ikonUrl.isNotEmpty
-                        ? Image.network(
-                            _ikonUrl,
-                            width: 60,
-                            height: 60,
-                            // Gør ikonet hvidt så det matcher designet. Slet denne linje, hvis du vil have skyernes rigtige farver:
-                            color: Colors.white,
-                          )
+                        ? PlatformAwareImage(imageUrl: _ikonUrl, width: 60, height: 60, fit: BoxFit.contain)
                         : const Icon(
                             Icons.wb_sunny,
                             color: Colors.white,
@@ -1631,14 +1610,7 @@ class _BegivenhedKortState extends State<BegivenhedKort> {
           children: [
             // BILLEDE: Tilpasser sig automatisk
             if (billedeUrl.isNotEmpty)
-              Image.network(
-                billedeUrl,
-                width: double.infinity, // Fyld hele bredden
-                fit: BoxFit
-                    .fitWidth, // Skalerer højden automatisk, så intet skæres af
-                errorBuilder: (context, error, stackTrace) =>
-                    const SizedBox.shrink(),
-              ),
+              PlatformAwareImage(imageUrl: billedeUrl, width: double.infinity, fit: BoxFit.fitWidth),
 
             Padding(
               padding: const EdgeInsets.all(16),
