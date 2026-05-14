@@ -66,6 +66,7 @@ class _NyhederPageState extends State<NyhederPage> {
           "Nyheder fra Oksbøl",
           style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: -0.5),
         ),
+        backgroundColor: Colors.white,
         foregroundColor: const Color(0xFFF27C21),
         elevation:
             0, // Fjerner den hårde skygge under topbaren for et mere "fladt" look

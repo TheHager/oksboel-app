@@ -1,3 +1,5 @@
+import 'utils/proxy_helper.dart';
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -77,7 +79,6 @@ class _ErhvervHubPageState extends State<ErhvervHubPage> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
         title: const Text(
           "Erhverv i Oksbøl",
@@ -86,7 +87,7 @@ class _ErhvervHubPageState extends State<ErhvervHubPage> {
             letterSpacing: -0.5,
           ), // Samme font-stil
         ),
-        backgroundColor: Colors.white,
+
         foregroundColor: const Color(0xFFF27C21),
         elevation: 0,
         centerTitle: true, // Centrerer teksten præcis ligesom på nyhedssiden
@@ -179,33 +180,8 @@ class _ErhvervHubPageState extends State<ErhvervHubPage> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
                                     child: billedeUrl.isNotEmpty
-                                        ? Image.network(
-                                            billedeUrl,
-                                            width: 60,
-                                            height: 60,
-                                            fit: BoxFit.contain,
-                                            errorBuilder:
-                                                (context, error, stackTrace) =>
-                                                    Container(
-                                                      width: 60,
-                                                      height: 60,
-                                                      color:
-                                                          Colors.grey.shade100,
-                                                      child: const Icon(
-                                                        Icons.broken_image,
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
-                                          )
-                                        : Container(
-                                            width: 60,
-                                            height: 60,
-                                            color: Colors.grey.shade100,
-                                            child: const Icon(
-                                              Icons.storefront,
-                                              color: Color(0xFFF27C21),
-                                            ),
-                                          ),
+                                        ? Image.network(getProxyUrl(billedeUrl), width: 60, height: 60, fit: BoxFit.contain)
+                                        : const SizedBox(width: 60, height: 60),
                                   ),
                                   const SizedBox(width: 16),
 
@@ -588,6 +564,12 @@ class OksbolApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFF27C21)),
         useMaterial3: true,
+        scaffoldBackgroundColor: const Color(0xFFF8F9FA),
+        appBarTheme: const AppBarTheme(
+          scrolledUnderElevation: 0.0,
+          surfaceTintColor: Colors.transparent,
+          backgroundColor: Color(0xFFF8F9FA),
+        ),
       ),
       home: const SplashScreen(),
     );
@@ -783,13 +765,12 @@ class _UdforskPageState extends State<UdforskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
         title: const Text(
           'Oplev naturen',
           style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: -0.5),
         ),
-        backgroundColor: Colors.white,
+
         foregroundColor: const Color(0xFFF27C21),
         elevation: 0,
         centerTitle: true,
@@ -1171,13 +1152,7 @@ class _OverblikPageState extends State<OverblikPage> {
                             ),
                           )
                         : _ikonUrl.isNotEmpty
-                        ? Image.network(
-                            _ikonUrl,
-                            width: 60,
-                            height: 60,
-                            // Gør ikonet hvidt så det matcher designet. Slet denne linje, hvis du vil have skyernes rigtige farver:
-                            color: Colors.white,
-                          )
+                        ? Image.network(getProxyUrl(_ikonUrl), width: 60, height: 60, color: Colors.white)
                         : const Icon(
                             Icons.wb_sunny,
                             color: Colors.white,
@@ -1489,7 +1464,7 @@ class _DetSkerPageState extends State<DetSkerPage> {
             letterSpacing: -0.5,
           ), // Samme font-stil
         ),
-        backgroundColor: Colors.white,
+
         foregroundColor: const Color(0xFFF27C21),
         elevation: 0,
         centerTitle: true, // Centrerer teksten præcis ligesom på nyhedssiden
@@ -1631,14 +1606,7 @@ class _BegivenhedKortState extends State<BegivenhedKort> {
           children: [
             // BILLEDE: Tilpasser sig automatisk
             if (billedeUrl.isNotEmpty)
-              Image.network(
-                billedeUrl,
-                width: double.infinity, // Fyld hele bredden
-                fit: BoxFit
-                    .fitWidth, // Skalerer højden automatisk, så intet skæres af
-                errorBuilder: (context, error, stackTrace) =>
-                    const SizedBox.shrink(),
-              ),
+              Image.network(getProxyUrl(billedeUrl), width: double.infinity, fit: BoxFit.fitWidth),
 
             Padding(
               padding: const EdgeInsets.all(16),
