@@ -1341,19 +1341,21 @@ class _OverblikPageState extends State<OverblikPage> {
     if (imageUrl.isNotEmpty) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(15),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            image: DecorationImage(
-              image: NetworkImage(getProxyUrl(imageUrl)),
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                Colors.black.withValues(alpha: 0.5),
-                BlendMode.darken,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.network(
+                getProxyUrl(imageUrl),
+                fit: BoxFit.cover,
               ),
             ),
-          ),
-          child: content,
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withValues(alpha: 0.5),
+              ),
+            ),
+            content,
+          ],
         ),
       );
     }
@@ -1407,19 +1409,21 @@ class _OverblikPageState extends State<OverblikPage> {
         padding: const EdgeInsets.only(bottom: 12),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              image: DecorationImage(
-                image: NetworkImage(getProxyUrl(imageUrl)),
-                fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withValues(alpha: 0.5),
-                  BlendMode.darken,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Image.network(
+                  getProxyUrl(imageUrl),
+                  fit: BoxFit.cover,
                 ),
               ),
-            ),
-            child: content,
+              Positioned.fill(
+                child: Container(
+                  color: Colors.black.withValues(alpha: 0.5),
+                ),
+              ),
+              content,
+            ],
           ),
         ),
       );
