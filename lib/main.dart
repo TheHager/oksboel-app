@@ -1339,77 +1339,8 @@ class _OverblikPageState extends State<OverblikPage> {
     );
 
     if (imageUrl.isNotEmpty) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image.network(
-                  getProxyUrl(imageUrl),
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            Positioned.fill(
-              child: Container(
-                color: Colors.black.withValues(alpha: 0.5),
-              ),
-            ),
-            content,
-          ],
-        ),
-      );
-    }
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(15),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
-          ),
-          child: content,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNyhedsKort(dynamic news) {
-    final imageUrl = news['billedeUrl']?.toString() ?? "";
-
-    final content = ListTile(
-      contentPadding: const EdgeInsets.all(12),
-      title: Text(
-        news['overskrift'] ?? "",
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
-          color: Colors.white,
-        ),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-      subtitle: Padding(
-        padding: const EdgeInsets.only(top: 4.0),
-        child: Text(
-          news['dato'] ?? "",
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: .6),
-            fontSize: 12,
-          ),
-        ),
-      ),
-      onTap: () => MainNavigation.skiftFane(4),
-    );
-
-    if (imageUrl.isNotEmpty) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 12),
+      return SizedBox(
+        height: 180,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: Stack(
@@ -1435,8 +1366,8 @@ class _OverblikPageState extends State<OverblikPage> {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+    return SizedBox(
+      height: 180,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: BackdropFilter(
@@ -1445,9 +1376,118 @@ class _OverblikPageState extends State<OverblikPage> {
             decoration: BoxDecoration(
               color: Colors.black.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: Colors.white.withValues(alpha: .2)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
             ),
             child: content,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNyhedsKort(dynamic news) {
+    final imageUrl = news['billedeUrl']?.toString() ?? "";
+
+    // The inner content is the same for both with and without image
+    final content = InkWell(
+      onTap: () => MainNavigation.skiftFane(4),
+      borderRadius: BorderRadius.circular(15),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              news['overskrift'] ?? "Nyhed",
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                const Icon(
+                  Icons.calendar_today,
+                  size: 16,
+                  color: Color(0xFFF27C21),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  news['dato'] ?? "",
+                  style: const TextStyle(
+                    color: Color(0xFFF27C21),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              "",
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white.withValues(alpha: 0.8),
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (imageUrl.isNotEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: SizedBox(
+          height: 180,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.network(
+                      getProxyUrl(imageUrl),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                Positioned.fill(
+                  child: Container(
+                    color: Colors.black.withValues(alpha: 0.5),
+                  ),
+                ),
+                content,
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: SizedBox(
+        height: 180,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+              ),
+              child: content,
+            ),
           ),
         ),
       ),
