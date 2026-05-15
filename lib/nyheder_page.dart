@@ -88,94 +88,97 @@ class _NyhederPageState extends State<NyhederPage> {
               itemCount: _nyheder.length,
               itemBuilder: (context, index) {
                 final nyhed = _nyheder[index];
-                return _buildNyhedsKort(nyhed);
+                return NyhedKort(nyhed: nyhed);
               },
             ),
     );
   }
 
-  Widget _buildNyhedsKort(Map<String, dynamic> nyhed) {
-    final billedeUrl = nyhed['billedeUrl']?.toString() ?? "";
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 24), // God plads mellem hver nyhed
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20), // Store, bløde hjørner
-        boxShadow: [
-          // En meget svag, elegant skygge i stedet for standard "Card" skyggen
-          BoxShadow(
-            color: Colors.black.withValues(alpha: .04),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (billedeUrl.isNotEmpty)
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-              child: Image.network(
+}
+
+class NyhedKort extends StatefulWidget {
+  final Map<String, dynamic> nyhed;
+
+  const NyhedKort({super.key, required this.nyhed});
+
+  @override
+  State<NyhedKort> createState() => _NyhedKortState();
+}
+
+class _NyhedKortState extends State<NyhedKort> {
+  bool _erFoldetUd = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final billedeUrl = widget.nyhed['billedeUrl']?.toString() ?? "";
+    String visningsDato = widget.nyhed['dato']?.toString() ?? "";
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      clipBehavior: Clip.antiAlias,
+      elevation: 3,
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            _erFoldetUd = !_erFoldetUd;
+          });
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (billedeUrl.isNotEmpty)
+              Image.network(
                 getProxyUrl(billedeUrl),
                 width: double.infinity,
-                height: 200,
-                fit: BoxFit.cover,
+                fit: BoxFit.fitWidth,
               ),
-            ),
-          Padding(
-            padding: const EdgeInsets.all(24.0), // Virkelig god indvendig plads
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Moderne "Dato-pille" med en svag orange baggrund
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF27C21).withValues(alpha: .1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    nyhed['dato'] ?? "",
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    visningsDato,
                     style: const TextStyle(
                       color: Color(0xFFF27C21),
-                      fontWeight: FontWeight.w700,
-                      fontSize: 12,
-                      letterSpacing: 0.5, // Gør små bogstaver lidt nemmere at læse
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
-
-                // Overskrift
-                Text(
-                  nyhed['overskrift'] ?? "Uden overskrift",
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800, // Tyk og markant
-                    letterSpacing:
-                        -0.5, // Et let "minus" i afstanden giver et super moderne look
-                    color: Color(
-                      0xFF1A1A1A,
-                    ), // Næsten sort, hvilket er blidere for øjnene
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          widget.nyhed['overskrift'] ?? "Uden overskrift",
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Icon(
+                        _erFoldetUd ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                        color: Colors.grey,
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(height: 12),
-
-                // Selve teksten
-                Text(
-                  nyhed['tekst'] ?? "",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey.shade700,
-                    height: 1.6, // Øget linjeafstand gør teksten LÆKKER at læse
-                  ),
-                ),
-              ],
+                  if (_erFoldetUd) ...[
+                    const SizedBox(height: 12),
+                    const Divider(),
+                    const SizedBox(height: 12),
+                    Text(
+                      widget.nyhed['tekst'] ?? "",
+                      style: TextStyle(
+                        color: Colors.grey.shade800,
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
           ),
         ],
