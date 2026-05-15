@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 Widget buildPlatformAwareImage({
   required String imageUrl,
@@ -7,17 +6,12 @@ Widget buildPlatformAwareImage({
   double? height,
   BoxFit? fit,
 }) {
-  return CachedNetworkImage(
-    imageUrl: imageUrl,
+  return Image.network(
+    imageUrl,
     width: width,
     height: height,
     fit: fit,
-    placeholder: (context, url) => SizedBox(
-      width: width,
-      height: height,
-      child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-    ),
-    errorWidget: (context, url, error) => SizedBox(
+    errorBuilder: (context, error, stackTrace) => SizedBox(
       width: width,
       height: height,
       child: const Icon(Icons.error_outline, color: Colors.grey),
