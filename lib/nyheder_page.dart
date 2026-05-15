@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 // ignore: unused_import
 import 'package:oksboel_app/main.dart';
+import 'package:oksboel_app/utils/proxy_helper.dart';
 
 class NyhederPage extends StatefulWidget {
   const NyhederPage({super.key});
@@ -94,6 +95,8 @@ class _NyhederPageState extends State<NyhederPage> {
   }
 
   Widget _buildNyhedsKort(Map<String, dynamic> nyhed) {
+    final billedeUrl = nyhed['billedeUrl']?.toString() ?? "";
+
     return Container(
       margin: const EdgeInsets.only(bottom: 24), // God plads mellem hver nyhed
       decoration: BoxDecoration(
@@ -108,56 +111,74 @@ class _NyhederPageState extends State<NyhederPage> {
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0), // Virkelig god indvendig plads
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Moderne "Dato-pille" med en svag orange baggrund
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF27C21).withValues(alpha: .1),
-                borderRadius: BorderRadius.circular(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (billedeUrl.isNotEmpty)
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
               ),
-              child: Text(
-                nyhed['dato'] ?? "",
-                style: const TextStyle(
-                  color: Color(0xFFF27C21),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12,
-                  letterSpacing: 0.5, // Gør små bogstaver lidt nemmere at læse
+              child: Image.network(
+                getProxyUrl(billedeUrl),
+                width: double.infinity,
+                height: 200,
+                fit: BoxFit.cover,
+              ),
+            ),
+          Padding(
+            padding: const EdgeInsets.all(24.0), // Virkelig god indvendig plads
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Moderne "Dato-pille" med en svag orange baggrund
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF27C21).withValues(alpha: .1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    nyhed['dato'] ?? "",
+                    style: const TextStyle(
+                      color: Color(0xFFF27C21),
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12,
+                      letterSpacing: 0.5, // Gør små bogstaver lidt nemmere at læse
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-            // Overskrift
-            Text(
-              nyhed['overskrift'] ?? "Uden overskrift",
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w800, // Tyk og markant
-                letterSpacing:
-                    -0.5, // Et let "minus" i afstanden giver et super moderne look
-                color: Color(
-                  0xFF1A1A1A,
-                ), // Næsten sort, hvilket er blidere for øjnene
-              ),
-            ),
-            const SizedBox(height: 12),
+                // Overskrift
+                Text(
+                  nyhed['overskrift'] ?? "Uden overskrift",
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800, // Tyk og markant
+                    letterSpacing:
+                        -0.5, // Et let "minus" i afstanden giver et super moderne look
+                    color: Color(
+                      0xFF1A1A1A,
+                    ), // Næsten sort, hvilket er blidere for øjnene
+                  ),
+                ),
+                const SizedBox(height: 12),
 
-            // Selve teksten
-            Text(
-              nyhed['tekst'] ?? "",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey.shade700,
-                height: 1.6, // Øget linjeafstand gør teksten LÆKKER at læse
-              ),
+                // Selve teksten
+                Text(
+                  nyhed['tekst'] ?? "",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey.shade700,
+                    height: 1.6, // Øget linjeafstand gør teksten LÆKKER at læse
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
