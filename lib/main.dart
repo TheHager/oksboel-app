@@ -1344,9 +1344,12 @@ class _OverblikPageState extends State<OverblikPage> {
         child: Stack(
           children: [
             Positioned.fill(
-              child: Image.network(
-                getProxyUrl(imageUrl),
-                fit: BoxFit.cover,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.network(
+                  getProxyUrl(imageUrl),
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             Positioned.fill(
@@ -1412,9 +1415,12 @@ class _OverblikPageState extends State<OverblikPage> {
           child: Stack(
             children: [
               Positioned.fill(
-                child: Image.network(
-                  getProxyUrl(imageUrl),
-                  fit: BoxFit.cover,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.network(
+                    getProxyUrl(imageUrl),
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
               Positioned.fill(
