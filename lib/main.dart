@@ -56,7 +56,9 @@ class _ErhvervHubPageState extends State<ErhvervHubPage> {
         "https://script.google.com/macros/s/AKfycbyHtOHT7rN8FPBN9GvpAeF6WgK9snTmZhQIF-e0mhFy36e30cioVCp20QYfwc84llrQMg/exec?type=erhverv";
 
     try {
-      final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 10));
+      final response = await http
+          .get(Uri.parse(url))
+          .timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) {
         setState(() {
           _allData = json.decode(response.body);
@@ -180,7 +182,12 @@ class _ErhvervHubPageState extends State<ErhvervHubPage> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
                                     child: billedeUrl.isNotEmpty
-                                        ? Image.network(getProxyUrl(billedeUrl), width: 60, height: 60, fit: BoxFit.contain)
+                                        ? Image.network(
+                                            getProxyUrl(billedeUrl),
+                                            width: 60,
+                                            height: 60,
+                                            fit: BoxFit.contain,
+                                          )
                                         : const SizedBox(width: 60, height: 60),
                                   ),
                                   const SizedBox(width: 16),
@@ -992,14 +999,22 @@ class _UdforskPageState extends State<UdforskPage> {
 
 // --- VEJR SERVICE ---
 class WeatherService {
-  static const String apiKey = String.fromEnvironment('WEATHER_API_KEY', defaultValue: '');
+  static const String apiKey = String.fromEnvironment(
+    'WEATHER_API_KEY',
+    defaultValue: '',
+  );
 
   Future<Map<String, dynamic>> fetchWeather() async {
     try {
-      final url = 'https://api.openweathermap.org/data/2.5/weather?lat=55.62&lon=8.28&appid=$apiKey&units=metric&lang=da';
-      final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 10));
+      final url =
+          'https://api.openweathermap.org/data/2.5/weather?lat=55.62&lon=8.28&appid=$apiKey&units=metric&lang=da';
+      final response = await http
+          .get(Uri.parse(url))
+          .timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) return json.decode(response.body);
-      throw Exception('Fejl ved hentning af vejr, status code: ${response.statusCode}');
+      throw Exception(
+        'Fejl ved hentning af vejr, status code: ${response.statusCode}',
+      );
     } catch (e) {
       throw Exception('Fejl ved vejr API kald: $e');
     }
@@ -1042,7 +1057,9 @@ class _OverblikPageState extends State<OverblikPage> {
     const url =
         "https://script.google.com/macros/s/AKfycbyHtOHT7rN8FPBN9GvpAeF6WgK9snTmZhQIF-e0mhFy36e30cioVCp20QYfwc84llrQMg/exec?type=Begivenheder";
     try {
-      final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 10));
+      final response = await http
+          .get(Uri.parse(url))
+          .timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         if (data.isNotEmpty && mounted) {
@@ -1058,10 +1075,13 @@ class _OverblikPageState extends State<OverblikPage> {
   }
 
   Future<void> _hentVejrData() async {
-    final url = 'https://api.openweathermap.org/data/2.5/weather?q=oksbol&units=metric&lang=da&appid=${WeatherService.apiKey}';
+    final url =
+        'https://api.openweathermap.org/data/2.5/weather?q=oksbol&units=metric&lang=da&appid=${WeatherService.apiKey}';
 
     try {
-      final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 10));
+      final response = await http
+          .get(Uri.parse(url))
+          .timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (mounted) {
@@ -1106,7 +1126,9 @@ class _OverblikPageState extends State<OverblikPage> {
     const url =
         "https://script.google.com/macros/s/AKfycbyHtOHT7rN8FPBN9GvpAeF6WgK9snTmZhQIF-e0mhFy36e30cioVCp20QYfwc84llrQMg/exec?type=Nyheder";
     try {
-      final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 10));
+      final response = await http
+          .get(Uri.parse(url))
+          .timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
@@ -1152,7 +1174,12 @@ class _OverblikPageState extends State<OverblikPage> {
                             ),
                           )
                         : _ikonUrl.isNotEmpty
-                        ? Image.network(getProxyUrl(_ikonUrl), width: 60, height: 60, color: Colors.white)
+                        ? Image.network(
+                            getProxyUrl(_ikonUrl),
+                            width: 60,
+                            height: 60,
+                            color: Colors.white,
+                          )
                         : const Icon(
                             Icons.wb_sunny,
                             color: Colors.white,
@@ -1258,119 +1285,159 @@ class _OverblikPageState extends State<OverblikPage> {
   Widget _buildHighlightWidget() {
     if (_naesteBegivenhed == null) return const SizedBox();
 
-    return ClipRRect(
-      // Klipper kanterne runde, så blur-effekten ikke går udenfor
+    final imageUrl = _naesteBegivenhed!['billedeUrl']?.toString() ?? "";
+
+    // The inner content is the same for both with and without image
+    final content = InkWell(
+      onTap: () => MainNavigation.skiftFane(1),
       borderRadius: BorderRadius.circular(15),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(
-          sigmaX: 3,
-          sigmaY: 3,
-        ), // Her er magien! (Sløring)
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _naesteBegivenhed!['navn'] ?? "Begivenhed",
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                const Icon(
+                  Icons.calendar_today,
+                  size: 16,
+                  color: Color(0xFFF27C21),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  _naesteBegivenhed!['dato'] ?? "",
+                  style: const TextStyle(
+                    color: Color(0xFFF27C21),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              _naesteBegivenhed!['tekst'] ?? "",
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white.withValues(alpha: 0.8),
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (imageUrl.isNotEmpty) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(15),
         child: Container(
           decoration: BoxDecoration(
-            // En mørk, semi-gennemsigtig baggrund gør hvid tekst VILDT flot
-            color: Colors.black.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.2),
-            ), // En tynd, fin glaskant
-          ),
-          child: InkWell(
-            onTap: () => MainNavigation.skiftFane(1),
-            borderRadius: BorderRadius.circular(15),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _naesteBegivenhed!['navn'] ?? "Begivenhed",
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white, // Ændret til hvid
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.calendar_today,
-                        size: 16,
-                        color: Color(0xFFF27C21),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        _naesteBegivenhed!['dato'] ?? "",
-                        style: const TextStyle(
-                          color: Color(0xFFF27C21),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    _naesteBegivenhed!['tekst'] ?? "",
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white.withValues(
-                        alpha: 0.8,
-                      ), // Lysegrå/hvid så det kan læses på mørk glas
-                      height: 1.5,
-                    ),
-                  ),
-                ],
+            image: DecorationImage(
+              image: NetworkImage(getProxyUrl(imageUrl)),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.black.withValues(alpha: 0.5),
+                BlendMode.darken,
               ),
             ),
           ),
+          child: content,
+        ),
+      );
+    }
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black.withValues(alpha: 0.2),
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+          ),
+          child: content,
         ),
       ),
     );
   }
 
   Widget _buildNyhedsKort(dynamic news) {
+    final imageUrl = news['billedeUrl']?.toString() ?? "";
+
+    final content = ListTile(
+      contentPadding: const EdgeInsets.all(12),
+      title: Text(
+        news['overskrift'] ?? "",
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+          color: Colors.white,
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 4.0),
+        child: Text(
+          news['dato'] ?? "",
+          style: TextStyle(
+            color: Colors.white.withValues(alpha: .6),
+            fontSize: 12,
+          ),
+        ),
+      ),
+      onTap: () => MainNavigation.skiftFane(4),
+    );
+
+    if (imageUrl.isNotEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              image: DecorationImage(
+                image: NetworkImage(getProxyUrl(imageUrl)),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withValues(alpha: 0.5),
+                  BlendMode.darken,
+                ),
+              ),
+            ),
+            child: content,
+          ),
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 3,
-            sigmaY: 3,
-          ), // Samme blur som begivenhed
+          filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.2), // Mørk glas-baggrund
+              color: Colors.black.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(15),
               border: Border.all(color: Colors.white.withValues(alpha: .2)),
             ),
-            child: ListTile(
-              contentPadding: const EdgeInsets.all(12),
-              title: Text(
-                news['overskrift'] ?? "",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  color: Colors.white, // Hvid tekst så det kan læses
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              subtitle: Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: Text(
-                  news['dato'] ?? "",
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: .6), // Lysegrå tekst
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-              onTap: () => MainNavigation.skiftFane(4),
-            ),
+            child: content,
           ),
         ),
       ),
@@ -1606,7 +1673,11 @@ class _BegivenhedKortState extends State<BegivenhedKort> {
           children: [
             // BILLEDE: Tilpasser sig automatisk
             if (billedeUrl.isNotEmpty)
-              Image.network(getProxyUrl(billedeUrl), width: double.infinity, fit: BoxFit.fitWidth),
+              Image.network(
+                getProxyUrl(billedeUrl),
+                width: double.infinity,
+                fit: BoxFit.fitWidth,
+              ),
 
             Padding(
               padding: const EdgeInsets.all(16),
