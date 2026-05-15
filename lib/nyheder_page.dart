@@ -180,8 +180,8 @@ class _NyhedKortState extends State<NyhedKort> {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
