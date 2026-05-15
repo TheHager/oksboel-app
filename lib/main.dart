@@ -1159,7 +1159,7 @@ class _OverblikPageState extends State<OverblikPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 60),
+              const SizedBox(height: 35),
               // --- 1. VEJR SEKTION ---
               Center(
                 child: Column(
@@ -1201,7 +1201,7 @@ class _OverblikPageState extends State<OverblikPage> {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 15),
 
               // --- 2. GENVEJS KNAPPER ---
               Padding(
@@ -1216,7 +1216,7 @@ class _OverblikPageState extends State<OverblikPage> {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 15),
 
               // --- 3. HIGHLIGHT KORT (Begivenhed) ---
               Padding(
@@ -1239,7 +1239,7 @@ class _OverblikPageState extends State<OverblikPage> {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 15),
 
               // --- 4. AKTUELLE NYHEDER (Løsning 1) ---
               Padding(
@@ -1274,7 +1274,7 @@ class _OverblikPageState extends State<OverblikPage> {
                 ),
               ),
 
-              const SizedBox(height: 50),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -1340,7 +1340,7 @@ class _OverblikPageState extends State<OverblikPage> {
 
     if (imageUrl.isNotEmpty) {
       return SizedBox(
-        height: 180,
+        height: 150,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: Stack(
@@ -1355,9 +1355,7 @@ class _OverblikPageState extends State<OverblikPage> {
                 ),
               ),
               Positioned.fill(
-                child: Container(
-                  color: Colors.black.withValues(alpha: 0.5),
-                ),
+                child: Container(color: Colors.black.withValues(alpha: 0.5)),
               ),
               content,
             ],
@@ -1367,7 +1365,7 @@ class _OverblikPageState extends State<OverblikPage> {
     }
 
     return SizedBox(
-      height: 180,
+      height: 150,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: BackdropFilter(
@@ -1445,7 +1443,7 @@ class _OverblikPageState extends State<OverblikPage> {
       return Padding(
         padding: const EdgeInsets.only(bottom: 16.0),
         child: SizedBox(
-          height: 180,
+          height: 150,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Stack(
@@ -1460,9 +1458,7 @@ class _OverblikPageState extends State<OverblikPage> {
                   ),
                 ),
                 Positioned.fill(
-                  child: Container(
-                    color: Colors.black.withValues(alpha: 0.5),
-                  ),
+                  child: Container(color: Colors.black.withValues(alpha: 0.5)),
                 ),
                 content,
               ],
@@ -1475,7 +1471,7 @@ class _OverblikPageState extends State<OverblikPage> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: SizedBox(
-        height: 180,
+        height: 150,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: BackdropFilter(
