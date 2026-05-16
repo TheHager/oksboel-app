@@ -3,6 +3,8 @@ import 'utils/proxy_helper.dart';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import 'services/api_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -572,10 +574,41 @@ class OksbolApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFF27C21)),
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0xFFF8F9FA),
+        textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)
+            .copyWith(
+              titleLarge: GoogleFonts.inter(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+              titleMedium: GoogleFonts.inter(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+              titleSmall: GoogleFonts.inter(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+        cardTheme: const CardThemeData(
+          color: Colors.white,
+          elevation: 1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(24)),
+            side: BorderSide.none,
+          ),
+        ),
         appBarTheme: const AppBarTheme(
           scrolledUnderElevation: 0.0,
           surfaceTintColor: Colors.transparent,
-          backgroundColor: Color(0xFFF8F9FA),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          foregroundColor: Colors.black87,
+          iconTheme: IconThemeData(color: Colors.black87),
+          titleTextStyle: TextStyle(
+            color: Colors.black87,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       home: const SplashScreen(),
@@ -637,18 +670,38 @@ class _MainNavigationState extends State<MainNavigation> {
           NyhederPage(), // Index 4
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed, // SKAL være fixed ved 5 elementer
-        selectedItemColor: const Color(0xFFF27C21), // Din orange farve
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Overblik'),
-          BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Det sker'),
-          BottomNavigationBarItem(icon: Icon(Icons.forest), label: 'Natur'),
-          BottomNavigationBarItem(icon: Icon(Icons.business), label: 'Erhverv'),
-          BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: 'Nyt'),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        onDestinationSelected: _onItemTapped,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        indicatorColor: const Color(0xFFFFB07F), // Muted orange/peach
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
+            label: 'Overblik',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.event_outlined),
+            selectedIcon: Icon(Icons.event),
+            label: 'Det sker',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.forest_outlined),
+            selectedIcon: Icon(Icons.forest),
+            label: 'Natur',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.business_outlined),
+            selectedIcon: Icon(Icons.business),
+            label: 'Erhverv',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.newspaper_outlined),
+            selectedIcon: Icon(Icons.newspaper),
+            label: 'Nyt',
+          ),
         ],
       ),
     );
