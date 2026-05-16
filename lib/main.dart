@@ -114,7 +114,7 @@ class _ErhvervHubPageState extends State<ErhvervHubPage> {
           Expanded(
             child: _loading
                 ? const Center(
-                    child: CircularProgressIndicator(color: Color(0xFFF27C21)),
+                    child: CircularProgressIndicator(color: const Color(0xFFA67B5B)),
                   )
                 : filtreretListe.isEmpty
                 ? const Center(child: Text("Ingen fundet i denne kategori"))
@@ -246,7 +246,7 @@ class _ErhvervHubPageState extends State<ErhvervHubPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: erValgt ? const Color(0xFFF27C21) : Colors.grey.shade200,
+          color: erValgt ? const Color(0xFFA67B5B) : Colors.grey.shade200,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -302,10 +302,10 @@ class _SkydetiderPageState extends State<SkydetiderPage> {
             margin: const EdgeInsets.all(16),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFFF27C21).withValues(alpha: 0.1),
+              color: const Color(0xFFA67B5B).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: const Color(0xFFF27C21).withValues(alpha: 0.5),
+                color: const Color(0xFFA67B5B).withValues(alpha: 0.5),
                 width: 1,
               ),
             ),
@@ -317,7 +317,7 @@ class _SkydetiderPageState extends State<SkydetiderPage> {
                   children: [
                     Icon(
                       Icons.warning_amber_rounded,
-                      color: Color(0xFFF27C21),
+                      color: const Color(0xFFA67B5B),
                       size: 20,
                     ),
                     SizedBox(width: 8),
@@ -325,7 +325,7 @@ class _SkydetiderPageState extends State<SkydetiderPage> {
                       "VIGTIG INFORMATION",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFFF27C21),
+                        color: const Color(0xFFA67B5B),
                         fontSize: 14,
                       ),
                     ),
@@ -353,7 +353,7 @@ class _SkydetiderPageState extends State<SkydetiderPage> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
-                    child: CircularProgressIndicator(color: Color(0xFFF27C21)),
+                    child: CircularProgressIndicator(color: const Color(0xFFA67B5B)),
                   );
                 }
                 if (snapshot.hasError) {
@@ -418,7 +418,7 @@ class _SkydetiderPageState extends State<SkydetiderPage> {
                         borderRadius: BorderRadius.circular(12),
                         side: erNaeste
                             ? const BorderSide(
-                                color: Color(0xFFF27C21),
+                                color: const Color(0xFFA67B5B),
                                 width: 2,
                               )
                             : BorderSide.none,
@@ -435,7 +435,7 @@ class _SkydetiderPageState extends State<SkydetiderPage> {
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFFF27C21),
+                                  color: const Color(0xFFA67B5B),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: const Text(
@@ -557,6 +557,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ],
         ),
+
       ),
     );
   }
@@ -608,6 +609,22 @@ class OksbolApp extends StatelessWidget {
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
+        ),
+        navigationBarTheme: NavigationBarThemeData(
+          indicatorColor: Colors.transparent,
+          backgroundColor: Colors.white,
+          iconTheme: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return const IconThemeData(color: Color(0xFFA67B5B)); // Soft muted clay/brown
+            }
+            return const IconThemeData(color: Colors.black54);
+          }),
+          labelTextStyle: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return const TextStyle(color: Color(0xFFA67B5B), fontWeight: FontWeight.w600, fontSize: 12);
+            }
+            return const TextStyle(color: Colors.black54, fontWeight: FontWeight.w500, fontSize: 12);
+          }),
         ),
       ),
       home: const SplashScreen(),
@@ -674,7 +691,6 @@ class _MainNavigationState extends State<MainNavigation> {
         onDestinationSelected: _onItemTapped,
         backgroundColor: Colors.white,
         elevation: 0,
-        indicatorColor: const Color(0xFFFFB07F), // Muted orange/peach
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
@@ -847,7 +863,7 @@ class _UdforskPageState extends State<UdforskPage> {
                       child: ChoiceChip(
                         label: Text(kat),
                         selected: valgtKategori == kat,
-                        selectedColor: const Color(0xFFF27C21),
+                        selectedColor: const Color(0xFFA67B5B),
                         onSelected: (bool selected) {
                           setState(() {
                             valgtKategori = kat;
@@ -867,7 +883,7 @@ class _UdforskPageState extends State<UdforskPage> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
-                    child: CircularProgressIndicator(color: Color(0xFFF27C21)),
+                    child: CircularProgressIndicator(color: const Color(0xFFA67B5B)),
                   );
                 }
                 if (snapshot.hasError) {
@@ -976,13 +992,13 @@ class _UdforskPageState extends State<UdforskPage> {
                                                 const Icon(
                                                   Icons.location_on,
                                                   size: 14,
-                                                  color: Color(0xFFF27C21),
+                                                  color: const Color(0xFFA67B5B),
                                                 ),
                                                 const SizedBox(width: 4),
                                                 Text(
                                                   afstandString,
                                                   style: const TextStyle(
-                                                    color: Color(0xFFF27C21),
+                                                    color: const Color(0xFFA67B5B),
                                                     fontSize: 13,
                                                     fontWeight: FontWeight.w500,
                                                   ),
@@ -1224,7 +1240,7 @@ class _OverblikPageState extends State<OverblikPage> {
                                   height: 50,
                                   width: 50,
                                   child: CircularProgressIndicator(
-                                    color: Color(0xFFF27C21),
+                                    color: const Color(0xFFA67B5B),
                                     strokeWidth: 2,
                                   ),
                                 )
@@ -1320,7 +1336,7 @@ class _OverblikPageState extends State<OverblikPage> {
                     if (_isLoadingNews)
                       const Center(
                         child: CircularProgressIndicator(
-                          color: Color(0xFFF27C21),
+                          color: const Color(0xFFA67B5B),
                         ),
                       )
                     else if (_nyheder.isEmpty)
@@ -1348,6 +1364,7 @@ class _OverblikPageState extends State<OverblikPage> {
     final imageUrl = _naesteBegivenhed!['billedeUrl']?.toString() ?? "";
 
     return Card(
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () => MainNavigation.skiftFane(1),
         borderRadius: BorderRadius.circular(24),
@@ -1358,14 +1375,9 @@ class _OverblikPageState extends State<OverblikPage> {
               SizedBox(
                 height: 150,
                 width: double.infinity,
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(24),
-                  ),
-                  child: Image.network(
-                    getProxyUrl(imageUrl),
-                    fit: BoxFit.cover,
-                  ),
+                child: Image.network(
+                  getProxyUrl(imageUrl),
+                  fit: BoxFit.contain,
                 ),
               ),
             Padding(
@@ -1389,13 +1401,13 @@ class _OverblikPageState extends State<OverblikPage> {
                       const Icon(
                         Icons.calendar_today,
                         size: 16,
-                        color: Color(0xFFF27C21),
+                        color: Color(0xFFA67B5B),
                       ),
                       const SizedBox(width: 8),
                       Text(
                         _naesteBegivenhed!['dato'] ?? "",
                         style: const TextStyle(
-                          color: Color(0xFFF27C21),
+                          color: const Color(0xFFA67B5B),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -1425,76 +1437,57 @@ class _OverblikPageState extends State<OverblikPage> {
     final imageUrl = news['billedeUrl']?.toString() ?? "";
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
+      padding: const EdgeInsets.only(bottom: 12.0),
       child: Card(
         child: InkWell(
           onTap: () => MainNavigation.skiftFane(4),
           borderRadius: BorderRadius.circular(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (imageUrl.isNotEmpty)
-                SizedBox(
-                  height: 150,
-                  width: double.infinity,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(24),
-                    ),
-                    child: Image.network(
-                      getProxyUrl(imageUrl),
-                      fit: BoxFit.cover,
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (imageUrl.isNotEmpty)
+                  SizedBox(
+                    height: 80,
+                    width: 80,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.network(
+                        getProxyUrl(imageUrl),
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
-                ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      news['overskrift'] ?? "Nyhed",
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.calendar_today,
-                          size: 16,
-                          color: Color(0xFFF27C21),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        news['dato'] ?? "",
+                        style: const TextStyle(
+                          color: Color(0xFFA67B5B),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
                         ),
-                        const SizedBox(width: 8),
-                        Text(
-                          news['dato'] ?? "",
-                          style: const TextStyle(
-                            color: Color(0xFFF27C21),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      news['tekst'] ?? "",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black54,
-                        height: 1.5,
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 4),
+                      Text(
+                        news['overskrift'] ?? "Nyhed",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -1531,7 +1524,7 @@ class _OverblikPageState extends State<OverblikPage> {
                 ),
               ],
             ),
-            child: Icon(ikon, color: const Color(0xFFF27C21), size: 28),
+            child: Icon(ikon, color: const Color(0xFFA67B5B), size: 28),
           ),
           const SizedBox(height: 8),
           Text(
@@ -1668,7 +1661,7 @@ class _DetSkerPageState extends State<DetSkerPage> {
             const Center(
               child: Padding(
                 padding: EdgeInsets.all(20.0),
-                child: CircularProgressIndicator(color: Color(0xFFF27C21)),
+                child: CircularProgressIndicator(color: const Color(0xFFA67B5B)),
               ),
             )
           else if (_begivenheder.isEmpty)
@@ -1750,7 +1743,7 @@ class _BegivenhedKortState extends State<BegivenhedKort> {
                   Text(
                     "$visningsDato - kl. ${widget.event['tid']}",
                     style: const TextStyle(
-                      color: Color(0xFFF27C21),
+                      color: const Color(0xFFA67B5B),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
