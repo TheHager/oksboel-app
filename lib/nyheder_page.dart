@@ -93,8 +93,6 @@ class _NyhederPageState extends State<NyhederPage> {
             ),
     );
   }
-
-
 }
 
 class NyhedKort extends StatefulWidget {
@@ -114,12 +112,21 @@ class _NyhedKortState extends State<NyhedKort> {
     final billedeUrl = widget.nyhed['billedeUrl']?.toString() ?? "";
     String visningsDato = widget.nyhed['dato']?.toString() ?? "";
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      clipBehavior: Clip.antiAlias,
-      elevation: 3,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
       child: InkWell(
+        borderRadius: BorderRadius.circular(24),
         onTap: () {
           setState(() {
             _erFoldetUd = !_erFoldetUd;
@@ -129,10 +136,19 @@ class _NyhedKortState extends State<NyhedKort> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (billedeUrl.isNotEmpty)
-              Image.network(
-                getProxyUrl(billedeUrl),
+              SizedBox(
+                height: 180,
                 width: double.infinity,
-                fit: BoxFit.fitWidth,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24),
+                  ),
+                  child: Image.network(
+                    getProxyUrl(billedeUrl),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             Padding(
               padding: const EdgeInsets.all(16),
@@ -141,14 +157,16 @@ class _NyhedKortState extends State<NyhedKort> {
                 children: [
                   Text(
                     visningsDato,
-                    style: const TextStyle(
-                      color: Color(0xFFF27C21),
-                      fontWeight: FontWeight.bold,
+                    style: TextStyle(
+                      color: Colors.brown.shade400,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: Text(
@@ -156,27 +174,32 @@ class _NyhedKortState extends State<NyhedKort> {
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                            letterSpacing: -0.5,
                           ),
                         ),
                       ),
                       Icon(
-                        _erFoldetUd ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                        _erFoldetUd
+                            ? Icons.keyboard_arrow_up
+                            : Icons.keyboard_arrow_down,
                         color: Colors.grey,
                       ),
                     ],
                   ),
-                  if (_erFoldetUd) ...[
-                    const SizedBox(height: 12),
-                    const Divider(),
-                    const SizedBox(height: 12),
-                    Text(
-                      widget.nyhed['tekst'] ?? "",
-                      style: TextStyle(
-                        color: Colors.grey.shade800,
-                        height: 1.5,
-                      ),
+                  const SizedBox(height: 12),
+                  Text(
+                    widget.nyhed['tekst'] ?? "",
+                    maxLines: _erFoldetUd ? null : 3,
+                    overflow: _erFoldetUd
+                        ? TextOverflow.visible
+                        : TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.grey.shade800,
+                      height: 1.5,
+                      fontWeight: FontWeight.normal,
                     ),
-                  ],
+                  ),
                 ],
               ),
             ),
