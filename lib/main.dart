@@ -1,6 +1,5 @@
 import 'utils/proxy_helper.dart';
 
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -1198,59 +1197,69 @@ class _OverblikPageState extends State<OverblikPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      body: Container(
+      backgroundColor:
+          Colors.transparent, // Global theme handles the off-white background
+      body: SizedBox(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/baggrund.jpg'),
-            fit: BoxFit.cover,
-          ),
-        ),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 35),
               // --- 1. VEJR SEKTION ---
-              Center(
-                child: Column(
-                  children: [
-                    _isLoadingWeather
-                        ? const SizedBox(
-                            height: 50,
-                            width: 50,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 24.0,
+                      horizontal: 16.0,
+                    ),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          _isLoadingWeather
+                              ? const SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: CircularProgressIndicator(
+                                    color: Color(0xFFF27C21),
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : _ikonUrl.isNotEmpty
+                              ? Image.network(
+                                  getProxyUrl(_ikonUrl),
+                                  width: 60,
+                                  height: 60,
+                                  color: Colors.black87,
+                                )
+                              : const Icon(
+                                  Icons.wb_sunny,
+                                  color: Colors.black87,
+                                  size: 50,
+                                ),
+                          const SizedBox(height: 8),
+                          Text(
+                            "$_temperatur i Oksbøl",
+                            style: const TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
                             ),
-                          )
-                        : _ikonUrl.isNotEmpty
-                        ? Image.network(
-                            getProxyUrl(_ikonUrl),
-                            width: 60,
-                            height: 60,
-                            color: Colors.white,
-                          )
-                        : const Icon(
-                            Icons.wb_sunny,
-                            color: Colors.white,
-                            size: 50,
                           ),
-                    Text(
-                      "$_temperatur i Oksbøl",
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                          Text(
+                            _vejrbeskrivelse,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Text(
-                      _vejrbeskrivelse,
-                      style: TextStyle(fontSize: 18, color: Colors.white70),
-                    ),
-                  ],
+                  ),
                 ),
               ),
 
@@ -1282,8 +1291,7 @@ class _OverblikPageState extends State<OverblikPage> {
                       style: TextStyle(
                         fontSize: 21,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        shadows: [Shadow(color: Colors.black54, blurRadius: 4)],
+                        color: Colors.black87,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -1305,8 +1313,7 @@ class _OverblikPageState extends State<OverblikPage> {
                       style: TextStyle(
                         fontSize: 21,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        shadows: [Shadow(color: Colors.black54, blurRadius: 4)],
+                        color: Colors.black87,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -1340,97 +1347,75 @@ class _OverblikPageState extends State<OverblikPage> {
 
     final imageUrl = _naesteBegivenhed!['billedeUrl']?.toString() ?? "";
 
-    // The inner content is the same for both with and without image
-    final content = InkWell(
-      onTap: () => MainNavigation.skiftFane(1),
-      borderRadius: BorderRadius.circular(15),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
+    return Card(
+      child: InkWell(
+        onTap: () => MainNavigation.skiftFane(1),
+        borderRadius: BorderRadius.circular(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              _naesteBegivenhed!['navn'] ?? "Begivenhed",
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                const Icon(
-                  Icons.calendar_today,
-                  size: 16,
-                  color: Color(0xFFF27C21),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  _naesteBegivenhed!['dato'] ?? "",
-                  style: const TextStyle(
-                    color: Color(0xFFF27C21),
-                    fontWeight: FontWeight.bold,
+            if (imageUrl.isNotEmpty)
+              SizedBox(
+                height: 150,
+                width: double.infinity,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(24),
+                  ),
+                  child: Image.network(
+                    getProxyUrl(imageUrl),
+                    fit: BoxFit.cover,
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              _naesteBegivenhed!['tekst'] ?? "",
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.white.withValues(alpha: 0.8),
-                height: 1.5,
+              ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _naesteBegivenhed!['navn'] ?? "Begivenhed",
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.calendar_today,
+                        size: 16,
+                        color: Color(0xFFF27C21),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        _naesteBegivenhed!['dato'] ?? "",
+                        style: const TextStyle(
+                          color: Color(0xFFF27C21),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    _naesteBegivenhed!['tekst'] ?? "",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black54,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
-        ),
-      ),
-    );
-
-    if (imageUrl.isNotEmpty) {
-      return SizedBox(
-        height: 150,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.network(
-                    getProxyUrl(imageUrl),
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-              Positioned.fill(
-                child: Container(color: Colors.black.withValues(alpha: 0.5)),
-              ),
-              content,
-            ],
-          ),
-        ),
-      );
-    }
-
-    return SizedBox(
-      height: 150,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
-            ),
-            child: content,
-          ),
         ),
       ),
     );
@@ -1439,104 +1424,77 @@ class _OverblikPageState extends State<OverblikPage> {
   Widget _buildNyhedsKort(dynamic news) {
     final imageUrl = news['billedeUrl']?.toString() ?? "";
 
-    // The inner content is the same for both with and without image
-    final content = InkWell(
-      onTap: () => MainNavigation.skiftFane(4),
-      borderRadius: BorderRadius.circular(15),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              news['overskrift'] ?? "Nyhed",
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                const Icon(
-                  Icons.calendar_today,
-                  size: 16,
-                  color: Color(0xFFF27C21),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  news['dato'] ?? "",
-                  style: const TextStyle(
-                    color: Color(0xFFF27C21),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              "",
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.white.withValues(alpha: 0.8),
-                height: 1.5,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    if (imageUrl.isNotEmpty) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 16.0),
-        child: SizedBox(
-          height: 150,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Stack(
-              children: [
-                Positioned.fill(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Card(
+        child: InkWell(
+          onTap: () => MainNavigation.skiftFane(4),
+          borderRadius: BorderRadius.circular(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (imageUrl.isNotEmpty)
+                SizedBox(
+                  height: 150,
+                  width: double.infinity,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(24),
+                    ),
                     child: Image.network(
                       getProxyUrl(imageUrl),
-                      fit: BoxFit.contain,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                Positioned.fill(
-                  child: Container(color: Colors.black.withValues(alpha: 0.5)),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      news['overskrift'] ?? "Nyhed",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.calendar_today,
+                          size: 16,
+                          color: Color(0xFFF27C21),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          news['dato'] ?? "",
+                          style: const TextStyle(
+                            color: Color(0xFFF27C21),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      news['tekst'] ?? "",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
                 ),
-                content,
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: SizedBox(
-        height: 150,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
               ),
-              child: content,
-            ),
+            ],
           ),
         ),
       ),
@@ -1561,20 +1519,25 @@ class _OverblikPageState extends State<OverblikPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              // Dette giver det flotte semi-gennemsigtige hvide look
-              color: Colors.white.withValues(alpha: .2),
+              color: Colors.white,
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.white.withValues(alpha: .3)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
-            child: Icon(ikon, color: Colors.white, size: 28),
+            child: Icon(ikon, color: const Color(0xFFF27C21), size: 28),
           ),
           const SizedBox(height: 8),
           Text(
             titel,
             style: const TextStyle(
-              color: Colors.white,
+              color: Colors.black87,
               fontSize: 12,
               fontWeight: FontWeight.w600,
               letterSpacing: -0.2,
