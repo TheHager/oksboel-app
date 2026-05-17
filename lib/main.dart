@@ -1377,7 +1377,7 @@ class _OverblikPageState extends State<OverblikPage> {
                 width: double.infinity,
                 child: Image.network(
                   getProxyUrl(imageUrl),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
               ),
             Padding(
@@ -1455,7 +1455,7 @@ class _OverblikPageState extends State<OverblikPage> {
                       borderRadius: BorderRadius.circular(16),
                       child: Image.network(
                         getProxyUrl(imageUrl),
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),
